@@ -198,7 +198,7 @@ transaction shipCoffee extends transferCoffee{
   --> Business trader
 
 /**
- * # Packing List
+ * # Packing Lists
  */
   o Double PL_PackingListId 
   o String PL_ICO_no optional
