@@ -31,6 +31,17 @@ concept Address {
   o String zip optional
 }
 
+concept Investment {
+  o String title 
+  o Double amount
+  o String additionalDescription optional
+}
+
+concept Condition {
+  o Boolean condensation 
+  o Boolean holeInContainer 
+}
+
 /**
  * # Participants
  */
@@ -84,70 +95,49 @@ asset Coffee identified by batchId {
   o State batchState
 
 /**
- * # ICO Certificate of Origin
+ * # Fair trade info
  */
-  o Double ICO_CertificateOfOriginId optional
-  o String ICO_ProducingCountry optional
-  o String ICO_CountryOfDestination optional
-  o DateTime ICO_DateOfExport optional
-  o Boolean ICO_Organic optional
-  o String ICO_IdentificationMark optional
-
-/**
- * # Organic Farming Certiificate
- */
-  o Double OFC_OrganicFarmingCertificateId optional
-  o Double OFC_InvoiceNo optional
-  o DateTime OFC_InvoiceDate optional
-  o String OFC_ContainerNo optional
-  o Double OFC_ContractNo optional
-  o String OFC_ICO_No optional
-
-/**
+  o String reportName optional
+  o String organizationDescription optional
+  o Double reportYear optional
+  o Double fairtradePremiumInvested optional
+  o Investment [] investments optional
+  
+ /**
  * # Packing List
  */
-  o Double PL_PackingListId optional
+  o String PL_Invoice_no optional
+  o DateTime PL_IssueDate optional
   o String PL_ICO_no optional
-  o Double PL_FDA_NO optional
-  o Double PL_Bill_of_Lading_No optional
+  o String PL_ICO_Lot optional
+  o String PL_FDA_NO optional
+  o String PL_Bill_of_Lading_No optional
+  o String PL_LoadedVessel optional
+  o String PL_VesselVoyage_No optional
   o String PL_Container_No optional
   o String PL_Seal_no optional
+  o String PL_timestamp optional
 
+  /**
+  * # weight tally details
+  */
+  o DateTime dateStripped optional
+  o String marks optional
+  o Double bagsExpected optional
+  o Condition condition optional
+  o Boolean insectActivity optional
 
-/**
- * # Bill Of Lading
- */
-  o Double BOL_BillOfLadingId optional
-  o Double BOL_Booking_no optional
-  o String BOL_vessel optional
-  o Double BOL_voyage_no optional
-  o Double BOL_contract optional
-  o Double BOL_Cert_no optional
-  o String BOL_ICO_no optional
-
-
-/**
- * # Product List (information from grower to roaster)
- */
-  o Double PrL_ProductListingId optional
-  o String PrL_Grower optional
-  o String PrL_Variety optional
-  o String PrL_Harvest optional
-  o String PrL_Altitude optional
-  o String PrL_Soil optional
-  o String PrL_Process optional
-
-
-/**
- * # Purchase Confirmation
- */
-  o Double PC_PurchaseConfirmationId optional
-  o DateTime PC_Date optional
-  o Double PC_Order_id optional
-  o String PC_ICO_No optional
-  o Double PC_Invoice_No optional
-  o Double PC_RNY_FLO_ID optional
-  o Double PC_Brook_FLO_ID optional
+  /**
+  * # cupping details
+  */
+  o DateTime date optional
+  o String cupper optional
+  o Double aroma optional
+  o Double flavor optional
+  o Double afterTaste optional
+  o Double acidity optional
+  o Double body optional
+  o Double finalScore optional
 
   --> Business owner
 }
@@ -172,100 +162,115 @@ abstract transaction transferCoffee {
   o String batchId
 }
 
-transaction regulateCoffee extends transferCoffee{
-  --> Regulator regulator
-  o Double ICO_CertificateOfOriginId
-  o String ICO_ProducingCountry optional
-  o String ICO_CountryOfDestination optional
-  o DateTime ICO_DateOfExport optional
-  o Boolean ICO_Organic optional 
-  o String ICO_IdentificationMark optional
+transaction submitFairTradeData extends transferCoffee{
+  o String reportName 
+  o String organizationDescription optional
+  o Double reportYear optional
+  o Double fairtradePremiumInvested optional
+  o String [] investments optional
 }
 
-
-transaction certifyOrganic extends transferCoffee{
-  --> Regulator regulator
-  o Double OFC_OrganicFarmingCertificateId
-  o Double OFC_InvoiceNo  optional
-  o DateTime OFC_InvoiceDate optional
-  o String OFC_ContainerNo optional
-  o Double OFC_ContractNo optional
-  o String OFC_ICO_No optional
-}
-
-transaction shipCoffee extends transferCoffee{
-  --> Business shipper
-  --> Business trader
-
-/**
- * # Packing Lists
- */
-  o Double PL_PackingListId 
-  o String PL_ICO_no optional
-  o Double PL_FDA_NO optional
-  o Double PL_Bill_of_Lading_No optional
-  o String PL_Container_No optional
-  o String PL_Seal_no optional
-
-
-/**
- * # Bill Of Lading
- */
-  o Double BOL_BillOfLadingId optional
-  o Double BOL_Booking_no optional
-  o String BOL_vessel optional
-  o Double BOL_voyage_no optional
-  o Double BOL_contract optional
-  o Double BOL_Cert_no optional
-  o String BOL_ICO_no optional
-}
-
-transaction purchaseCoffee extends transferCoffee{
-  --> Business retailer
+transaction submitPackingList extends transferCoffee{
+  --> Business grower
   --> Business trader
   
   /**
  * # Purchase Confirmation
  */
-  o Double PC_PurchaseConfirmationId 
-  o DateTime PC_Date optional
-  o Double PC_Order_id optional
-  o String PC_ICO_No optional
-  o Double PC_Invoice_No optional
-  o Double PC_RNY_FLO_ID optional
-  o Double PC_Brook_FLO_ID optional
+  o String PL_Invoice_no 
+  o DateTime PL_IssueDate optional
+  o String PL_ICO_no optional
+  o String PL_ICO_Lot optional
+  o String PL_FDA_NO optional
+  o String PL_Bill_of_Lading_No optional
+  o String PL_LoadedVessel optional
+  o String PL_VesselVoyage_No optional
+  o String PL_Container_No optional
+  o String PL_Seal_no optional
+  o String PL_timestamp optional
+}
+
+transaction submitInboundWeightTally extends transferCoffee{
+  --> Coffee coffeeBatch  
+  /**
+  * # weight tally details
+  */
+  o DateTime dateStripped optional
+  o String marks optional
+  o Double bagsExpected optional
+  o Condition condition
+  o Boolean insectActivity
+}
+
+transaction submitCupping extends transferCoffee{
+  --> Coffee coffeeBatch  
+
+  /**
+  * # roast details
+  */
+  o DateTime date 
+  o String cupper 
+  o Double aroma optional
+  o Double flavor optional
+  o Double afterTaste optional
+  o Double acidity optional
+  o Double body optional
+  o Double finalScore optional
 }
 
 /**
 * # events
 */
 
-event shippingComplete {
+event getPackingList {
+  --> Business grower
+  --> Business consignee
+  o String PL_Invoice_no 
+  o DateTime PL_IssueDate optional
+  o String PL_ICO_no optional
+  o String PL_ICO_Lot optional
+  o String PL_FDA_NO optional
+  o String PL_Bill_of_Lading_No optional
+  o String PL_LoadedVessel optional
+  o String PL_VesselVoyage_No optional
+  o String PL_Container_No optional
+  o String PL_Seal_no optional
+  o String PL_timestamp
   o String batchId
-  --> Business owner
-  --> Business shipper
-  o String timeStamp
 }
 
-event regulationComplete {
+event getFairTradeData {
+  o String reportName optional
+  o String organizationDescription optional
+  o Double reportYear optional
+  o String fairtradePremiumInvested optional
+  o String [] investments optional
   o String batchId
-  --> Business owner
-  --> Regulator regulator
-  o String timeStamp
 }
 
-event organicCertification {
+event getInboundWeightTally {
+  o DateTime dateStripped optional
+  o String marks optional
+  o Double bagsExpected optional
+  o Condition condition
+  o Boolean insectActivity
   o String batchId
-  --> Business owner
-  --> Regulator regulator
   o String timeStamp
+  o Coffee asset
 }
 
-event purchaseComplete {
+event getCupping {
+  o DateTime date 
+  o String cupper 
+  o Double aroma optional
+  o Double flavor optional
+  o Double afterTaste optional
+  o Double acidity optional
+  o Double body optional
+  o Double finalScore optional
   o String batchId
-  --> Business retailer
-  --> Business trader
   o String timeStamp
+  o Coffee asset
 }
 
 event cupData {
