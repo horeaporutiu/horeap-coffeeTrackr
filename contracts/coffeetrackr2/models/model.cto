@@ -100,9 +100,13 @@ asset Coffee identified by batchId {
   o String reportName optional
   o String organizationDescription optional
   o Double reportYear optional
-  o Double fairtradePremiumInvested optional
-  o Investment [] investments optional
-  
+  o String fairtradePremiumInvested optional
+  o String investmentTitle1 optional
+  o String investmentAmount1 optional
+  o String investmentTitle2 optional
+  o String investmentAmount2 optional
+  o String investmentTitle3 optional
+  o String investmentAmount3 optional
  /**
  * # Packing List
  */
@@ -166,8 +170,13 @@ transaction submitFairTradeData extends transferCoffee{
   o String reportName 
   o String organizationDescription optional
   o Double reportYear optional
-  o Double fairtradePremiumInvested optional
-  o String [] investments optional
+  o String fairtradePremiumInvested optional
+  o String investmentTitle1 optional
+  o String investmentAmount1 optional
+  o String investmentTitle2 optional
+  o String investmentAmount2 optional
+  o String investmentTitle3 optional
+  o String investmentAmount3 optional
 }
 
 transaction submitPackingList extends transferCoffee{
@@ -244,7 +253,12 @@ event getFairTradeData {
   o String organizationDescription optional
   o Double reportYear optional
   o String fairtradePremiumInvested optional
-  o String [] investments optional
+  o String investmentTitle1 optional
+  o String investmentAmount1 optional
+  o String investmentTitle2 optional
+  o String investmentAmount2 optional
+  o String investmentTitle3 optional
+  o String investmentAmount3 optional
   o String batchId
 }
 

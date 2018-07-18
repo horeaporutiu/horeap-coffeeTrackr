@@ -200,16 +200,12 @@ async function pourCup(newCoffee) {
       coffee.organizationDescription = coffeeBatch.organizationDescription;
       coffee.reportYear = coffeeBatch.reportYear;
       coffee.fairtradePremiumInvested = coffeeBatch.fairtradePremiumInvested;
-      
-      if(!coffeeBatch.investments) {
-        coffeeBatch.investments = [];
-      }
-      
-      for (var i = 0; i < coffeeBatch.investments.length; i++) {
-         coffeeBatch.investments.push(coffeeBatch.investments[i]);
-      }
-      
-      coffee.investments = coffeeBatch.investments;
+      coffee.investmentTitle1 = coffeeBatch.investmentTitle1;
+      coffee.investmentTitle2 = coffeeBatch.investmentTitle2;
+      coffee.investmentTitle3 = coffeeBatch.investmentTitle3;
+      coffee.investmentAmount1 = coffeeBatch.investmentAmount1;
+      coffee.investmentAmount2 = coffeeBatch.investmentAmount2;
+      coffee.investmentAmount3 = coffeeBatch.investmentAmount3;
   
       // Create and emit a regulation event
       var event = getFactory().newEvent('org.ibm.coffee', 'getFairTradeData');
@@ -218,8 +214,12 @@ async function pourCup(newCoffee) {
       event.organizationDescription = coffeeBatch.organizationDescription;
       event.reportYear = coffeeBatch.reportYear;
       event.fairtradePremiumInvested = coffeeBatch.fairtradePremiumInvested;
-    event.investments = coffeeBatch.investments;
-      
+      event.investmentTitle1 = coffeeBatch.investmentTitle1;
+      event.investmentTitle2 = coffeeBatch.investmentTitle2;
+      event.investmentTitle3 = coffeeBatch.investmentTitle3;
+      event.investmentAmount1 = coffeeBatch.investmentAmount1;
+      event.investmentAmount2 = coffeeBatch.investmentAmount2;
+      event.investmentAmount3 = coffeeBatch.investmentAmount3;
       emit(event);
   
       // publish update
